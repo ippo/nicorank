@@ -1,0 +1,35 @@
+
+
+bin/fake_cron.rb
+bin/day_count.rb
+lib/salvage.rb
+lib/nico_salvage.rb
+app/models/ranking_file.rb
+
+rails g controller Day index edit fix
+
+-----
+rails g bootstrap:install
+rails g simple_form:install --bootstrap
+rails g bootstrap:layout application fluid
+ 
+ex)
+rails g scaffold Post title:string
+rails g bootstrap:themed Posts
+
+app/assets/javascripts/application.js
+  //= require bootstrap-material-design
+app/assets/stylesheets/application.css
+  *= require bootstrap-material-design
+
+rails g kaminari:config
+rails g kaminari:views bootstrap
+
+-----
+active?:
+activemodel:    dummy activerecord for validation
+activeresource: rest activerecord
+activehash:     hash(yaml) file activerecord
+
+color?:
+http://www.materialui.co/colors
