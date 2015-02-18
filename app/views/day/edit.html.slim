@@ -1,0 +1,37 @@
+javascript:
+  $.fn.editable.defaults.mode = 'inline';
+  $(function(){
+    var url = $(location).attr('host') + "/websocket";
+    var wsr = new WebSocketRails(url);
+    var channel = wsr.subscribe("editors");
+    var session_id = "#{session.id}";
+    channel.bind("websocket", function(data){
+      if(data["session_id"] != session_id){
+        $("#websocket_message").text(data["message"]);
+      }
+    });
+    $('.editable').editable();
+  });
+
+div#websocket_message
+
+h3 日刊ランキング 編集
+- title = @config[:title] || @code
+h1 #{title} #{@day}
+- if @config[:description]
+  .description= simple_format @config[:description]
+- if @config[:keywords]
+  .keywords.text-primary
+    - @config[:keywords].to_a.each do |keyword|
+      | 『#{keyword}』
+    | 検索
+- if File::exist? @rank.list_file
+  span.text-info> 動画データ #{File::mtime(@rank.list_file)}更新
+  span.text-info> オプション #{File::mtime(@rank.opti_file)}更新
+- else
+  | まだデータがありません
+hr
+p #{@items.size > 100 ? 100 : @items.size} of #{@items.size} videos
+ol
+  - @items[0, 100].each do |item|
+    = render partial: 'item', locals: {item: item}

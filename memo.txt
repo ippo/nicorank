@@ -1,35 +1,136 @@
+-----
+how to test use;
 
+git clone https://github.com/ippo/nicorank.git
+cd nicorank
+bundle install
+./bin/sample_setup.rb
+# or rails runnner ./bin/sample_setup.rb
+./bin/day_count.rb
+# or rails runnner ./bin/day_count.rb
+rails s -b 0.0.0.0
+web; localhost:3000
+./bin/fake_cron.rb
+# or rails runner ./bin/fake_cron.rb
+-----
+
+-----
+files, routes;
 
 bin/fake_cron.rb
 bin/day_count.rb
+bin/sample_setup.rb
 lib/salvage.rb
 lib/nico_salvage.rb
 app/models/ranking_file.rb
 
-rails g controller Day index edit fix
+app/controllers/day_controller.rb
+
+  day/:code/
+  day/:code/:date
+  day/:code/:date.yml, .txt(.nrm,.tsv)
+  day/:code/:date/edit
+  day/:code/:date/fix
+  day/:code/:date/editable
+  root day#top
+
+  day/index	code list
+  day/list	video items
+  day/edit	basic auth
+  day/fix	save rank-options, redirect_to /day/edit
+  day/conf	edit config
+  day/pass	update password
+  day/bss	if you need
+  day/editable
+-----
 
 -----
+todo, check;
+
+? nrm read/write
+? nrm point_per1,per2,point calc?
+? change passowrd
+? edit config
+? fix: auto-set opt: status->ranking top10???
+? score calc lambda-eval? from yaml-text
+? websocket channel: editors->#{:code}_editors ???
+? x-editable-checkbox
+? checkbox->colorchange
+? bootstrap thumbnail in-color-change?
+? niconico ch_id link?
+
+? create jump-nicoscript
+? create frame-image
+? get comments and select 10sec?
+? create movie(video,sound: split, merge, movie+frame-image)
+  ? linux avisynth? or 
+  ? 000001.png...0010000.png->ffmpeg
+  ? swf2avi?
+-----
+
+-----
+step;
+
 rails g bootstrap:install
 rails g simple_form:install --bootstrap
 rails g bootstrap:layout application fluid
- 
+
+  Inside your views, use the 'simple_form_for' with one of the Bootstrap form
+  classes, '.form-horizontal' or '.form-inline', as the following:
+  = simple_form_for(@user, html: { class: 'form-horizontal' }) do |form|
+
+app/assets/javascripts/application.js
+  //= require bootstrap-material-design
+  //= require editable/bootstrap-editable
+  //= require editable/rails
+app/assets/stylesheets/application.css
+  *= require bootstrap-material-design
+  *= require editable/bootstrap-editable
+
+cp **bootstrap**/fonts app/assets/fonts
+config/application.rb
+    config.assets.paths << "#{Rails}/app/assets/fonts"
+app/assets/stylesheets/application.css
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('../assets/glyphicons-halflings-regular.eot');
+  src: url('../assets/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../assets/glyphicons-halflings-regular.woff') format('woff'), url('../assets/glyphicons-halflings-regular.ttf') format('truetype'), url('../assets/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
+
+rails g websocket_rails:install
+create controllers/websocket_controller.rb
+edit   config/events.rb
+edit   config/environments/development.rb
+
+rails g controller Day top index list edit fix conf pass bbs
+  # X: config O:conf (method overwrite error)
+  javascript:
+    $('.editable').editable();
+    websocket-something
+
+config/initializers/assets.rb
+  add;
+  Rails.application.config.assets.precompile += %w( editable/loading.gif )
+-----
+
+-----
+step someday?;
+
 ex)
 rails g scaffold Post title:string
 rails g bootstrap:themed Posts
 
-app/assets/javascripts/application.js
-  //= require bootstrap-material-design
-app/assets/stylesheets/application.css
-  *= require bootstrap-material-design
-
 rails g kaminari:config
 rails g kaminari:views bootstrap
+-----
 
 -----
+rails-lib?;
+
 active?:
 activemodel:    dummy activerecord for validation
 activeresource: rest activerecord
 activehash:     hash(yaml) file activerecord
 
-color?:
+color?;
 http://www.materialui.co/colors

@@ -13,8 +13,9 @@ loop{
   $stderr.puts "now  #{now.to_s}"
   step = Time.at ((now - hour_shift).to_f / hour8).round * hour8 + hour_shift
   flag = true if (now - step).abs <= min30
+  flag = false if now.hour == 20
 
-  if flag
+  if flag # count 4:00, 12:00 
     system "./bin/day_count.rb"
     flag = false
   end

@@ -1,0 +1,15 @@
+- if @code
+  - today = Date::today - 1
+  - day = params[:date] || today
+  - day = Date::parse day if day.class == String
+  - day_str = (day - 1).strftime "%Y%m%d"
+  li= link_to @code, code: @code
+  li= link_to "<#{day_str}", params.merge(date: day_str)
+  li= link_to day.strftime("%Y%m%d"), params
+  - if day < today
+    - day_str = (day + 1).strftime "%Y%m%d"
+    li= link_to "#{day_str}>", params.merge(date: day_str)
+  - if action_name == 'list'
+    li= link_to '[編集]', params.merge(action: :edit)
+  - elsif action_name == 'edit'
+    li= link_to '[リスト]', params.merge(action: :list)

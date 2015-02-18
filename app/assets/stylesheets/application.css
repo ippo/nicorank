@@ -11,5 +11,66 @@
  * file per style scope.
  *
  *= require_tree .
+ *= require bootstrap-material-design
+ *= require editable/bootstrap-editable
  *= require_self
  */
+
+/* bootstrap fonts */
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('../assets/glyphicons-halflings-regular.eot');
+  src: url('../assets/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../assets/glyphicons-halflings-regular.woff') format('woff'), url('../assets/glyphicons-halflings-regular.ttf') format('truetype'), url('../assets/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
+
+/* custom */
+header .container{
+    background-color: rgba(0,230,118,1);
+}
+body{
+    background-color: rgba(185,246,202,1);
+}
+footer{
+    background-color: rgba(0,200,83,1);
+}
+footer .copy, footer .version{
+    margin: 0.2em;
+    padding: 0.2em;
+}
+
+#websocket_message{
+    background-color: rgba(255,255,0,1);
+    color:  rgba(213,0,0,1);
+}
+
+.item .panel-heading a{
+    color: #E8F5E9;
+}
+.item .panel-heading a.code:hover{
+    color: #f44336;
+}
+.item .panel-heading a.code:visited{
+    color: #263238;
+}
+.item .media-left{
+    width: 145px;
+}
+.item .res{
+    background-color: rgba(206,255,144,1);
+    font-size: smaller;
+    padding: 0.2em;
+}
+.item .counts span.view, .item .counts span.comment, .item .counts span.mylist, .item .counts span.point{
+    margin-right: 1em;
+}
+.item .counts span.length{
+    margin-right: 1em;
+    color: rgba(0,150,136,1);
+}
+.item .counts span.time{
+    margin-right: 1em;
+    color: rgba(76,175,80,1);
+}
+.item .tags .tag{
+    border: 1px solid white;
+}

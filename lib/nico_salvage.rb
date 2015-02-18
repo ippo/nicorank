@@ -235,9 +235,9 @@ class Salvage # NicoSalvage rename? [todo]
       @data
     end
 
-    def save ( mode = @mode, data = @data )
+    def save ( mode = @mode, data_ = @data )
       message "#{self.class} : #{method_name(0)} : #{filename} ", DEVELOP_LEVEL
-      @data = data
+      @data = data_
       lock{
         check_and_create_dir filename.dirname
         case mode
@@ -250,30 +250,83 @@ class Salvage # NicoSalvage rename? [todo]
     end
 
     def nrm2hash ( lines = [] ) #??? [todo]
-      info
-    end
-
-    def hash2nrm ( data = @data ) #??? [todo]
-      list
-    end
-
-    def load_nrm #??? [todo]
-      lines = []
-      open(filename){ |f| lines = f.readlines }
-      keys = lines.shift
+      keys = %w|video_id rank view_counter comment_num mylist_counter point_per1 point_per2 point title first_retrieve image tags|
+      int_keys = %w|view_counter comment_num mylist_counter point|
+      float_keys = %w|point_per1 point_per2|
+      sym_keys = %w|rank point_per1 point_per2 point image|
       infos = []
       lines.each{ |line|
         info = {}
         keys.each_with_index{ |key, i| info[key] = line[i] }
+        int_keys.each{ |key|
+          info[key] = info[key].gsub(/,/, '').to_i
+        }
+        float_keys.each{ |key|
+          info[key] = info[key].to_f
+        }
+        sym_keys.each{ |key|
+          info[key.to_sym] = info[key]
+          info.delete key
+        }
+	time_str = info['first_retrieve'].gsub(/年|月/, '/').sub(/日/, '').gsub(/：/, ':')
+	info['first_retrieve'] = Time::parse time_str
+        tags = []
+        info['tags'].split('\n').each{ |tag_str|
+          tag_info = {}
+          tag_info['content'] = tag_str
+          if tag_str =~ /^★/
+            tag_info['content'] = $'
+            tag_info['lock'] = '1'
+          end
+          tags << tag_info
+        }
+        info['tags'] = tags
         infos << info
       }
-      @data = infos
+      info
+    end
+
+    def hash2nrm ( data_ = @data ) #??? [todo]
+      lines = []
+      keys = %w|video_id rank view_counter comment_num mylist_counter point_per1 point_per2 point title first_retrieve image tags|
+      int_keys = %w|view_counter comment_num mylist_counter point|
+      data_.each_with_index{ |info, i|
+        line = []
+        keys.each{ |key|
+          val = info[key]
+          if int_keys.include? key
+            val = val.to_s.gsub(/(\d)(?=(\d{3})+(?!\d))/, '\1,')
+          elsif key == 'rank' and val.to_s == ''
+            val = i + 1
+          elsif key == 'first_retrieve'
+            val = val.strftime("%Y年%m月%d日 %H：%M：%S")
+          elsif key == 'tags'
+            tags = []
+            val.each{ |tag_info|
+              str = ''
+              str << '★' if tag_info['lock']
+              str << tag_info['content']
+              tags << str
+            }
+            val = tags.join('\n')
+          end
+          line << val
+        }
+        lines << line
+      }
+      lines
+    end
+
+    def load_nrm #??? [todo]
+      lines = []
+      open(filename, 'r:sjis'){ |f| lines = f.readlines.map{ |line| line.chomp.split(/\t/) } }
+      @data = nrm2hash lines
     end
 
     def save_nrm #??? [todo]
-      open(filename, 'w'){ |f|
-        f.puts keys.join("\t")
-        @data.each{ |line| f.puts line.values.join("\t") }
+      lines = hash2nrm
+      open(filename, 'w:sjis'){ |f|
+        lines.each{ |line| f.puts line.join("\t") }
       }
     end
   end

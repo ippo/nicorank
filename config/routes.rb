@@ -1,9 +1,27 @@
 Rails.application.routes.draw do
+  get  'day' => 'day#index'
+  get  'day/:code(/:date(.:format))'    => 'day#list'
+  get  'day/:code/:date/edit'           => 'day#edit'
+  get  'day/:code/:date/fix'            => 'day#fix'
+  put  'day/:code/:date/:item/editable' => 'day#editable'
+
+  get  'day/top'
+  get  'day/index'
+  get  'day/list'
+  get  'day/edit'
+  get  'day/update'
+  get  'day/fix'
+  get  'day/conf'
+  get  'day/pass'
+  get  'day/bbs'
+  put  'day/editable'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
   # root 'welcome#index'
+  root 'day#top'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

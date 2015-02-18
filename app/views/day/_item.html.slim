@@ -1,0 +1,74 @@
+- thumbnail_server_id = cycle(1, 2, 3, 4)
+- item['video_id'] =~ /\d+/
+- video_code = $&
+- item[:thumbnail_url] = "http://tn-skr#{thumbnail_server_id}.smilevideo.jp/smile?i=#{video_code}"
+- item_id = "item_#{item['video_id']}"
+- item_class = "item panel panel-success"
+- item_class = "item panel panel-warning" if item[:option] and item[:option]['state'] == 'delete'
+- item_class = "item panel panel-info" if item[:option] and item[:option]['state'] =~ /^rankin|pickup$/
+li class=item_class id=item_id
+  .panel-heading
+    a.code(href=item['watch_url'])= item['video_id']
+    a.title.panel-title(href=item['watch_url'])= item['title']
+  - panel_class = "panel_body"
+  - panel_class = "panel_body alert-warning" if item[:option] and item[:option]['state'] == 'delete'
+  div class=panel_class
+    .media
+      .media-left.pull-left
+        .media-object
+          a.thumbnail href=item['watch_url']
+            = image_tag item[:thumbnail_url], size: "130x100", alt: item['video_id']
+          - if item['user_id']
+            a href="http://www.nicovideo.jp/user/#{item['user_id']}"
+              = image_tag item['user_icon_url'], size: "50x50", alt: item['user_id'], class: "thumbnail pull-left"
+            a.user_name(href="http://www.nicovideo.jp/user/#{item['user_id']}")= item['user_nickname']
+          - elsif item['ch_id']
+            a href="http://www.nicovideo.jp/channel/#{item['ch_id']}"
+              = image_tag item['ch_icon_url'], size: "50x50", alt: item['user_id'], class: "thumbnail pull-left"
+            a.user_name(href="http://www.nicovideo.jp/channel/#{item['ch_id']}")= item['ch_name']
+      .media-body
+        .desc= item['description']
+        .res= item['last_res_body']
+        .counts
+          span.view
+            | 再生
+            span.badge.label-primary= number_to_currency item['view_counter'], unit: '', precision: 0
+          span.comment
+            | コメント
+            span.badge.label-success= number_to_currency item['comment_num'], unit: '', precision: 0
+          span.mylist 
+            | マイリスト
+            span.badge.label-info= number_to_currency item['mylist_counter'], unit: '', precision: 0
+          span.point
+            | スコア
+            span.badge.label-danger= number_to_currency item[:point], unit: '', precision: 0
+            - if item[:org_point]
+              | ←
+              span.badge.label-warning= number_to_currency item[:org_point], unit: '', precision: 0
+          span.length= item['length']
+          span.time= item['first_retrieve'].strftime "%Y-%m-%d %H:%M:%S"
+        .tags
+          - item['tags'].each do |tag|
+            - if tag['category']
+              a.tag.category.label.label-warning(href="http://www.nicovideo.jp/tag/#{tag['content']}")= tag['content']
+            - elsif tag['lock']
+              a.tag.lock.label.label-primary(href="http://www.nicovideo.jp/tag/#{tag['content']}")= tag['content']
+            - else
+              a.tag.label.label-success(href="http://www.nicovideo.jp/tag/#{tag['content']}")= tag['content']
+  - if action_name == 'edit' or item[:option]
+    .panel-footer.option
+      - video_id = item['video_id']
+      - option = item[:option] || {}
+      .state
+        label>(for="state") 状態:
+        a.state.editable(href="#" data-type="select" data-name="state" data-value="1" data-source="['rankin','delete','pickup', '']" data-url="/day/#{@code}/#{@day}/#{video_id}/editable")= option['state']
+      .memo
+        label>(for="memo") メモ:
+        a.memo.editable(href="#" data-type="text" data-name="memo" data-url="/day/#{@code}/#{@day}/#{video_id}/editable")= option['memo']
+      .time
+        span.start
+          label>(for="start") 開始:
+          a.start.editable>(href="#" data-type="text" data-name="start" data-url="/day/#{@code}/#{@day}/#{video_id}/editable")= option['start']
+        span.length
+          label>(for="length") 長さ:
+          a.length.editable(href="#" data-type="text" data-name="length" data-url="/day/#{@code}/#{@day}/#{video_id}/editable")= option['length']

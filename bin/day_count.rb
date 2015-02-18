@@ -11,10 +11,18 @@ end_time = Time::parse today.to_s
 start_time = Time::parse (today - 7).to_s
 # start_time <= check < end_time
 limit = start_time
-keywords = ['VOCALOID',
-            'UTAU',
-            'CeVIOカバー曲 or ささらオリジナル曲'
-           ]
+#keywords = ['VOCALOID',
+#            'UTAU',
+#            'CeVIOカバー曲 or ささらオリジナル曲'
+#           ]
+keywords = YAML::load_file("./public/day/#{code}.yml")[:keywords]
+
+class Salvage::Page
+  def initialize_custom ( config = @config )
+    @cache.base_dir  = Pathname './db/cache/'
+    @record.base_dir = Pathname './db/info/'
+  end
+end
 client = NicoSalvage.new
 
 #- tag_rss search
@@ -39,7 +47,7 @@ page.record.save
 #- merge 7days tag_rss search video_id
 video_ids = []
 (start_time.to_date..end_time.to_date).each{ |day|
-  dir = day.strftime "./info/%Y/%m/%d/**/tag_rss/#{code}.yml"
+  dir = day.strftime "./db/info/%Y/%m/%d/**/tag_rss/#{code}.yml"
   Dir::glob(dir).each{ |file|
     videos = YAML::load_file(file).select{ |item| start_time <= item['pubDate'] }
     new_video_ids = videos.map{ |item| item[:video_id] }
@@ -70,11 +78,13 @@ items = items.sort_by{ |item|
       view    = 0 if mylist == 0
       point   = (view + comment * 5 + mylist * 25).round
       item[:point] = point
-      [point, item['view_counter'], item['comment_num'], item['mylist_counter'], item['video_id']] }
+      [point, item['view_counter'], item['comment_num'], item['mylist_counter'], item['video_id']] }.reverse
 p items.size
 
 #- cp to RankingFile.public_dir/:code
-file = Time.now.strftime "./public/day/#{code}/%Y%m%d.yml"
+file = (end_time - 1).strftime "./public/day/#{code}/%Y%m%d.yml"
 open(file, 'w'){ |f| f.write items.to_yaml }
+$stderr.puts file
+
 # or record = Salvage::Record.new
 #    record.save??? [todo]

@@ -1,0 +1,20 @@
+h3 日刊ランキング
+- title = @config[:title] || @code
+h1 #{title} #{@day}
+- if @config[:description]
+  .description= simple_format @config[:description]
+- if @config[:keywords]
+  .keywords.text-primary
+    - @config[:keywords].to_a.each do |keyword|
+      | 『#{keyword}』
+    | 検索
+- if File::exist? @rank.list_file
+  span.text-info> 動画データ #{File::mtime(@rank.list_file)}更新
+  span.text-info> オプション #{File::mtime(@rank.opti_file)}更新
+- else
+  | まだデータがありません
+hr
+p #{@items.size > 100 ? 100 : @items.size} of #{@items.size} videos
+ol
+  - @items[0, 100].each do |item|
+    = render partial: 'item', locals: {item: item}

@@ -511,6 +511,7 @@ class Salvage
   class Record
     include Tips::Message
     include Tips::Adjust
+    attr_accessor :base_dir
     attr_accessor :dir
     attr_accessor :data
     attr_accessor :mode

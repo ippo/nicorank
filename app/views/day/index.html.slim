@@ -1,0 +1,9 @@
+h1 日刊ランキング
+p #{@codes.size} rankings
+ul
+  - @codes.each do |code|
+    - rank = RankingFile.new(code)
+    - info = rank.config
+    - title = info[:title] || code
+    li= link_to title, code: code, action: :list
+

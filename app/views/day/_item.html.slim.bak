@@ -1,0 +1,52 @@
+    - thumbnail_server_id = cycle(1, 2, 3, 4)
+    - item['video_id'] =~ /\d+/
+    - video_code = $&
+    - item[:thumbnail_url] = "http://tn-skr#{thumbnail_server_id}.smilevideo.jp/smile?i=#{video_code}"
+    li.item.panel.panel-success
+      .panel-heading
+        a.code(href=item['watch_url'])= item['video_id']
+        a.title.panel-title(href=item['watch_url'])= item['title']
+      .panel-body
+        .media
+          .media-left.pull-left
+            .media-object
+              a.thumbnail href=item['watch_url']
+                = image_tag item[:thumbnail_url], size: "130x100", alt: item['video_id']
+              - if item['user_id']
+                a href="http://www.nicovideo.jp/user/#{item['user_id']}"
+                  = image_tag item['user_icon_url'], size: "50x50", alt: item['user_id'], class: "img-rounded"
+                a.user_name(href="http://www.nicovideo.jp/user/#{item['user_id']}")= item['user_nickname']
+              - elsif item['ch_id']
+                a href="http://www.nicovideo.jp/channel/#{item['ch_id']}"
+                  = image_tag item['ch_icon_url'], size: "50x50", alt: item['user_id'], class: "img-rounded"
+                a.user_name(href="http://www.nicovideo.jp/channel/#{item['ch_id']}")= item['ch_name']
+          .media-body
+            .desc= item['description']
+            .res= item['last_res_body']
+            .counts
+              span.view
+                | 再生
+                span.badge= number_to_currency item['view_counter'], unit: '', precision: 0
+              span.comment
+                | コメント
+                span.badge= number_to_currency item['comment_num'], unit: '', precision: 0
+              span.mylist 
+                | マイリスト
+                span.badge= number_to_currency item['mylist_counter'], unit: '', precision: 0
+              span.point
+                | スコア
+                span.badge= number_to_currency item[:point], unit: '', precision: 0
+              span.length= item['length']
+              span.time= item['first_retrieve'].strftime "%Y-%m-%d %H:%M:%S"
+            .tags
+            - item['tags'].each do |tag|
+              - if tag['category']
+                a.tag.category.label.label-warning(href="http://www.nicovideo.jp/tag/#{tag['content']}")= tag['content']
+              - elsif tag['lock']
+                a.tag.lock.label.label-primary(href="http://www.nicovideo.jp/tag/#{tag['content']}")= tag['content']
+              - else
+                a.tag.label.label-success(href="http://www.nicovideo.jp/tag/#{tag['content']}")= tag['content']
+        - if action_name == 'edit'
+          hr
+          .alert.alert-info
+            span test

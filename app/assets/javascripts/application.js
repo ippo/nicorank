@@ -12,5 +12,10 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require twitter/bootstrap
+//= require bootstrap-material-design
 //= require turbolinks
 //= require_tree .
+//= require websocket_rails/main
+//= require editable/bootstrap-editable
+//= require editable/rails
