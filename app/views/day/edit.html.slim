@@ -27,6 +27,7 @@ h1 #{title} #{@day}
     | 検索
 - if File::exist? @rank.list_file
   span.text-info> 動画データ #{File::mtime(@rank.list_file)}更新
+- if File::exist? @rank.opti_file
   span.text-info> オプション #{File::mtime(@rank.opti_file)}更新
 - else
   | まだデータがありません

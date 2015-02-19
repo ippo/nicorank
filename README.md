@@ -20,6 +20,8 @@ yet another niconico ranking maker ?
  git clone https://github.com/ippo/nicorank
  cd nicorank
  bundle install
+ # or, sudo bundle install
+ # or, su; bundle insall
  # input your password if required
 ```
 
@@ -90,7 +92,7 @@ create/edit file and dir
  and etc
 ```
 
-## references
+# references
 
 niconico daily vocaloid ranking
 
