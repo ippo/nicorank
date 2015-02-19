@@ -25,8 +25,8 @@ yaml = <<EOS
   VOCALOID、UTAU、他音源の日刊ランキング。
   ポロリもあるよ。
 :keywords:
-  - VOCALOID
-  - UTAU
-  - CeVIOカバー曲 or ささらオリジナル曲'
+- VOCALOID
+- UTAU
+- CeVIOカバー曲 or ささらオリジナル曲'
 EOS
 open("public/day/#{code}.yml", 'w').write yaml

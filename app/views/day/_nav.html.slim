@@ -11,5 +11,7 @@
     li= link_to "#{day_str}>", params.merge(date: day_str)
   - if action_name == 'list'
     li= link_to '[編集]', params.merge(action: :edit)
-  - elsif action_name == 'edit'
+  - elsif %w|edit conf pass|.include? action_name
     li= link_to '[リスト]', params.merge(action: :list)
+    li= link_to '設定', params.merge(action: :conf)
+    li= link_to 'パス', params.merge(action: :pass)

@@ -49,16 +49,17 @@ todo, check;
 
 ? nrm read/write
 ? nrm point_per1,per2,point calc?
-? change passowrd
-? edit config
+? edit config x-editable?
 ? fix: auto-set opt: status->ranking top10???
 ? score calc lambda-eval? from yaml-text
+? production: set env SECRET_KEY_BASE ???
 ? websocket channel: editors->#{:code}_editors ???
 ? x-editable-checkbox
 ? checkbox->colorchange
 ? bootstrap thumbnail in-color-change?
 ? niconico ch_id link?
 
+? character-picker, char-color-set
 ? create jump-nicoscript
 ? create frame-image
 ? get comments and select 10sec?

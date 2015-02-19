@@ -1,2 +1,8 @@
-h1 Day#pass
-p Find me in app/views/day/pass.html.slim
+h3 日刊ランキング パスワード設定
+- title = @config[:title] || @code
+h1 #{title}
+
+p please input new password
+
+= form_tag({}, class: 'form-horizontal') do
+  = password_field_tag :pass, @rank.pass[:pass], class: 'form-control password'

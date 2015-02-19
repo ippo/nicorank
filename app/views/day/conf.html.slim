@@ -1,2 +1,9 @@
-h1 Day#conf
-p Find me in app/views/day/conf.html.slim
+h3 日刊ランキング 設定編集
+- title = @config[:title] || @code
+h1 #{title}
+
+p please input YAML format text
+
+= form_tag({}, class: 'form-horizontal') do
+  = text_area_tag :text, @config.to_yaml, class: 'form-control config', rows: 10
+  = submit_tag :save

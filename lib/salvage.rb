@@ -290,7 +290,7 @@ class Salvage
         cache_time:      60 * 60, # 1hour
         local:           :limit,  # or true or false
         lock_dir:        './lock', # or false
-        lock_out_time:   3         # 3sec
+        lock_out_time:   5         # 5sec
       }
       @config.update config
       @base_dir        = Pathname @config[:base_dir]
@@ -523,7 +523,7 @@ class Salvage
         mode:            :yaml,
         ext_name:        'yml',
         lock_dir:        './lock', # or false
-        lock_out_time:   3         # 3sec
+        lock_out_time:   5         # 5sec
       }
       @config.update config
       @base_dir      = Pathname @config[:base_dir]

@@ -207,7 +207,7 @@ class Salvage # NicoSalvage rename? [todo]
             tags = []
             thumb[key].each{ |c_tags|
               #c_tags['domain'] == 'jp' # 今はこれだけ 昔はtw,de,es
-              tags += c_tags['tag'].map{ |tag| tag.class == String ? {'content'=>tag} : tag }
+              tags += c_tags['tag'].map{ |tag| tag.class == String ? {'content'=>tag} : tag } if c_tags['tag']
             }
             info[key] = tags
           end

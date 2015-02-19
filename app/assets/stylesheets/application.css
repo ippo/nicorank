@@ -37,6 +37,14 @@ footer .copy, footer .version{
     margin: 0.2em;
     padding: 0.2em;
 }
+textarea.config{
+    border: 1px solid rgba(38,50,56,1);
+    background-color: rgba(204,255,144,1);
+}
+input.password{
+    border: 1px solid rgba(38,50,56,1);
+    background-color: rgba(204,255,144,1);
+}
 
 #websocket_message{
     background-color: rgba(255,255,0,1);

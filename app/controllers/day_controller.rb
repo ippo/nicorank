@@ -14,7 +14,7 @@ class DayController < ApplicationController
 
   def list
     setup_list
-    @items.delete_if{ |item| item[:option] and !item[:option]['delete'].blank? }
+    @items.delete_if{ |item| item[:option] and item[:option]['state'] == 'delete' }
     respond_to do |format|
       format.html
       format.text {
@@ -42,12 +42,36 @@ class DayController < ApplicationController
   end
 
   def conf
+    setup_conf
+    text = params[:text]
+    if text
+      begin
+        info = YAML::load(text)
+        @rank.save_config info
+        flash[:notice] = "config update"
+      rescue
+        flash[:error] = "yaml parse error"
+      end
+    end
   end
 
   def pass
+    setup_conf
+    @rank.password
+    pass = params[:pass]
+    if pass
+      begin
+        @rank.pass[:pass] = pass
+        @rank.save_password 
+        flash[:notice] = "password update"
+      rescue
+        flash[:error] = "password update error"
+      end
+    end
   end
 
   def bbs
+    setup_conf
   end
 
   def editable
@@ -77,17 +101,21 @@ class DayController < ApplicationController
     end
   end
 
-  def setup_list
+  def setup_conf
     @code = params[:code]
     @day  = params[:date] || (Date::today - 1).strftime("%Y%m%d")
-    redirect_to date: @day unless params[:date]
-    
+    params[:date] = @day
+
     rank = RankingFile.new @code
     rank.day = @day if @day
     @config = rank.config
     @items = rank.items
     @options = rank.options
     @rank = rank
+  end
+
+  def setup_list
+    setup_conf
 
     @items.each{ |item|
       video_id = item['video_id']

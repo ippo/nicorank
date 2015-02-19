@@ -123,8 +123,9 @@ class RankingFile #DailyRanking
 
   def copy_option
     video_ids = items.map{ |item| item['video_id'] }
-    options
+    #options
     old_rank = RankingFile.new code: @code, today: (@day - 1)
+    return unless File::exist? old_rank.opti_file
     old_rank.options.each{ |video_id, old_option|
       next unless video_ids.include? video_id
       new_option = {}
